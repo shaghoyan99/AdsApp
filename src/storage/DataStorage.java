@@ -15,24 +15,21 @@ public class DataStorage {
     private List<Item> items = new ArrayList<>();
 
 
-    public void initData() throws IOException, ClassNotFoundException {
-        try {
-            map = FileUtil.deserializeUser();
-            items = FileUtil.deserializeItem();
-
-        } catch (Exception e) {
-            System.out.println("The file is empty");
+    public void initData() {
+        map = FileUtil.deserializeUser();
+        items = FileUtil.deserializeItem();
+        if (items != null && !items.isEmpty()) {
+            Item item = items.get(items.size() - 1);
+            itemId = item.getId() + 1;
         }
-
     }
 
-    public void add(User user) throws IOException {
-
+    public void add(User user) {
         map.put(user.getPhoneNumber(), user);
         FileUtil.serializeUser(map);
     }
 
-    public void add(Item item) throws IOException {
+    public void add(Item item) {
         item.setId(itemId++);
         items.add(item);
         FileUtil.serializeItem(items);
@@ -106,11 +103,13 @@ public class DataStorage {
                 iterator.remove();
             }
         }
+        FileUtil.serializeItem(items);
 //        items.removeIf(item -> item.getUser().equals(user));Use
     }
 
     public void deleteItemsById(long id) {
         items.remove(getItemById(id));
+        FileUtil.serializeItem(items);
     }
 
 

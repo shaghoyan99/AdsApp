@@ -66,7 +66,7 @@ public class AdvertisementMain {
             } else {
                 System.out.println("User already exists");
             }
-        } catch (ArrayIndexOutOfBoundsException | IOException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("Wrong Data!");
 
         }
