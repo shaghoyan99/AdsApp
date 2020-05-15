@@ -11,8 +11,8 @@ import java.util.Map;
 
 public class FileUtil {
 
-    private static final String USER_PATH = "src\\util\\file\\serializeUser.obj";
-    private static final String ITEM_PATH = "src\\util\\file\\serializeItem.obj";
+    private static final String USER_PATH = "serializeUser.obj";
+    private static final String ITEM_PATH = "serializeItem.obj";
 
     public static void serializeUser(Map<String, User> userMap) {
         File serializeUser = new File(USER_PATH);

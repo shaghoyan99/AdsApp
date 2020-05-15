@@ -1,5 +1,5 @@
-package main;
 
+import commands.Command;
 import model.Category;
 import model.Gender;
 import model.Item;
@@ -11,9 +11,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Scanner;
 
-import static main.Command.*;
 
-public class AdvertisementMain {
+public class AdvertisementMain implements Command {
 
     private static final Scanner scanner = new Scanner(System.in);
     private static final DataStorage dataStorage = new DataStorage();
