@@ -4,6 +4,7 @@ public interface Command {
 
     int LOGIN = 1;
     int REGISTER = 2;
+    int IMPORT_USERS = 3;
     int EXIT = 0;
 
     int ADD_NEW_AD = 1;
@@ -20,6 +21,7 @@ public interface Command {
     static void printMainCommands() {
         System.out.println("Please input " + LOGIN + " for LOGIN");
         System.out.println("Please input " + REGISTER + " for REGISTER");
+        System.out.println("Please input " + IMPORT_USERS + " for IMPORT_USERS");
         System.out.println("Please input " + EXIT + " for EXIT");
     }
 

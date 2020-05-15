@@ -4,6 +4,11 @@ import model.Category;
 import model.Gender;
 import model.Item;
 import model.User;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import storage.DataStorage;
 
 import java.io.IOException;
@@ -36,6 +41,9 @@ public class AdvertisementMain implements Command {
                 case REGISTER:
                     registerUser();
                     break;
+                case IMPORT_USERS:
+                    importFromXlsx();
+                    break;
                 case EXIT:
                     isRun = false;
                     break;
@@ -43,6 +51,43 @@ public class AdvertisementMain implements Command {
                     System.out.println("Wrong Command!");
             }
         }
+    }
+
+    private static void importFromXlsx() {
+        System.out.println("Please select xlsx path");
+        String xlsxPath = scanner.nextLine();
+
+        try {
+            XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
+            Sheet sheet = workbook.getSheetAt(0);
+            int lastRowNum = sheet.getLastRowNum();
+            for (int i = 1; i <= lastRowNum; i++) {
+                Row row = sheet.getRow(i);
+                String name = row.getCell(0).getStringCellValue();
+                String surName = row.getCell(1).getStringCellValue();
+                Double age = row.getCell(2).getNumericCellValue();
+                Gender gender = Gender.valueOf(row.getCell(3).getStringCellValue());
+                Cell phoneNumber = row.getCell(4);
+                String phoneNumberStr = phoneNumber.getCellType() == CellType.NUMERIC ?
+                        String.valueOf(Double.valueOf(phoneNumber.getNumericCellValue()).intValue()) : phoneNumber.getStringCellValue();
+                Cell password = row.getCell(5);
+                String passwordStr = password.getCellType() == CellType.NUMERIC ?
+                        String.valueOf(Double.valueOf(password.getNumericCellValue()).intValue()) : password.getStringCellValue();
+                User user = new User();
+                user.setName(name);
+                user.setSurName(surName);
+                user.setAge(age.intValue());
+                user.setGender(gender);
+                user.setPhoneNumber(phoneNumberStr);
+                user.setPassword(passwordStr);
+                dataStorage.add(user);
+            }
+            System.out.println("Import was success!");
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error while importing users");
+        }
+
     }
 
     private static void registerUser() {
@@ -138,7 +183,6 @@ public class AdvertisementMain implements Command {
     }
 
 
-
     private static void addNewItem() {
         System.out.println("Please input Item data: title,text,price,category");
         System.out.println("Please choose category name from list " + Arrays.toString(Category.values()));
@@ -162,10 +206,11 @@ public class AdvertisementMain implements Command {
             String categoryStr = scanner.nextLine();
             Category category = Category.valueOf(categoryStr);
             dataStorage.printItemsByCategory(category);
-        }catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Wrong Category!");
         }
     }
+
     private static void deleteById() {
         System.out.println("Please choose id from list");
         dataStorage.printItemsByUser(currentUser);
@@ -173,7 +218,7 @@ public class AdvertisementMain implements Command {
         Item itemById = dataStorage.getItemById(id);
         if (itemById != null && itemById.getUser().equals(currentUser)) {
             dataStorage.deleteItemsById(id);
-        }else {
+        } else {
             System.out.println("Wrong Id!");
         }
     }
