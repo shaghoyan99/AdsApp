@@ -59,68 +59,77 @@ public class AdvertisementMain implements Command {
     }
 
     private static void importFromItemXlsx() {
-        System.out.println("Please select xlsx path");
-        String xlsxPath = scanner.nextLine();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Please select xlsx path");
+                String xlsxPath = scanner.nextLine();
 
-        try{
-            XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
-            Sheet sheet = workbook.getSheetAt(0);
-            int lastRowNum = sheet.getLastRowNum();
-            for (int i = 1; i <= lastRowNum ; i++) {
-                Row row = sheet.getRow(i);
-                String title = row.getCell(0).getStringCellValue();
-                String text = row.getCell(1).getStringCellValue();
-                String price = row.getCell(2).getStringCellValue();
-                Category category = Category.valueOf(row.getCell(3).getStringCellValue());
-                Item item = new Item(title, text, price,
-                        currentUser, category, new Date());
-                dataStorage.add(item);
-//                dataStorage.addItem(item);
+                try{
+                    XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
+                    Sheet sheet = workbook.getSheetAt(0);
+                    int lastRowNum = sheet.getLastRowNum();
+                    for (int i = 1; i <= lastRowNum ; i++) {
+                        Row row = sheet.getRow(i);
+                        String title = row.getCell(0).getStringCellValue();
+                        String text = row.getCell(1).getStringCellValue();
+                        String price = row.getCell(2).getStringCellValue();
+                        Category category = Category.valueOf(row.getCell(3).getStringCellValue());
+                        Item item = new Item(title, text, price,
+                                currentUser, category, new Date());
+                        dataStorage.add(item);
+                    }
+                    System.out.println("Import was success!");
+                }catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Error while importing users");
+                }
             }
-            System.out.println("Import was success!");
-        }catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error while importing users");
-        }
+        }).start();
+
     }
 
 
 
     private static void importFromUserXlsx() {
-        System.out.println("Please select xlsx path");
-        String xlsxPath = scanner.nextLine();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Please select xlsx path");
+                String xlsxPath = scanner.nextLine();
 
-        try {
-            XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
-            Sheet sheet = workbook.getSheetAt(0);
-            int lastRowNum = sheet.getLastRowNum();
-            for (int i = 1; i <= lastRowNum; i++) {
-                Row row = sheet.getRow(i);
-                String name = row.getCell(0).getStringCellValue();
-                String surName = row.getCell(1).getStringCellValue();
-                Gender gender = Gender.valueOf(row.getCell(2).getStringCellValue());
-                String age = row.getCell(3).getStringCellValue();
-                Cell phoneNumber = row.getCell(4);
-                String phoneNumberStr = phoneNumber.getCellType() == CellType.NUMERIC ?
-                        String.valueOf(Double.valueOf(phoneNumber.getNumericCellValue()).intValue()) : phoneNumber.getStringCellValue();
-                Cell password = row.getCell(5);
-                String passwordStr = password.getCellType() == CellType.NUMERIC ?
-                        String.valueOf(Double.valueOf(password.getNumericCellValue()).intValue()) : password.getStringCellValue();
-                User user = new User();
-                user.setName(name);
-                user.setSurName(surName);
-                user.setAge(age);
-                user.setGender(gender);
-                user.setPhoneNumber(phoneNumberStr);
-                user.setPassword(passwordStr);
-                dataStorage.add(user);
+                try {
+                    XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
+                    Sheet sheet = workbook.getSheetAt(0);
+                    int lastRowNum = sheet.getLastRowNum();
+                    for (int i = 1; i <= lastRowNum; i++) {
+                        Row row = sheet.getRow(i);
+                        String name = row.getCell(0).getStringCellValue();
+                        String surName = row.getCell(1).getStringCellValue();
+                        Gender gender = Gender.valueOf(row.getCell(2).getStringCellValue());
+                        String age = row.getCell(3).getStringCellValue();
+                        Cell phoneNumber = row.getCell(4);
+                        String phoneNumberStr = phoneNumber.getCellType() == CellType.NUMERIC ?
+                                String.valueOf(Double.valueOf(phoneNumber.getNumericCellValue()).intValue()) : phoneNumber.getStringCellValue();
+                        Cell password = row.getCell(5);
+                        String passwordStr = password.getCellType() == CellType.NUMERIC ?
+                                String.valueOf(Double.valueOf(password.getNumericCellValue()).intValue()) : password.getStringCellValue();
+                        User user = new User();
+                        user.setName(name);
+                        user.setSurName(surName);
+                        user.setAge(age);
+                        user.setGender(gender);
+                        user.setPhoneNumber(phoneNumberStr);
+                        user.setPassword(passwordStr);
+                        dataStorage.add(user);
+                    }
+                    System.out.println("Import was success!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("Error while importing users");
+                }
             }
-            System.out.println("Import was success!");
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("Error while importing users");
-        }
-
+        }).start();
     }
 
     private static void registerUser() {
