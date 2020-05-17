@@ -3,6 +3,7 @@ package storage;
 import model.Category;
 import model.Item;
 import model.User;
+import util.ExcelUtil;
 import util.FileUtil;
 
 import java.io.IOException;
@@ -18,22 +19,40 @@ public class DataStorage {
     public void initData() {
         map = FileUtil.deserializeUser();
         items = FileUtil.deserializeItem();
+
+
         if (items != null && !items.isEmpty()) {
             Item item = items.get(items.size() - 1);
             itemId = item.getId() + 1;
         }
     }
 
-    public void add(User user) {
+    public void add(User user) throws IOException {
         map.put(user.getPhoneNumber(), user);
+        ExcelUtil.user(map);
         FileUtil.serializeUser(map);
+
     }
 
-    public void add(Item item) {
+    public void add(Item item) throws IOException {
         item.setId(itemId++);
         items.add(item);
+        ExcelUtil.item(items);
         FileUtil.serializeItem(items);
+
     }
+
+//    public void addUser(User user) {
+//        Map<String,User> userMap = new HashMap<>();
+//        userMap.put(user.getPhoneNumber(),user);
+//        FileUtil.serializeUser(userMap);
+//
+//    }
+//    public void addItem(Item item) {
+//        List<Item> it = new ArrayList<>();
+//        it.add(item);
+//        FileUtil.serializeItem(it);
+//    }
 
     public User getUser(String phoneNumber) {
         return map.get(phoneNumber);

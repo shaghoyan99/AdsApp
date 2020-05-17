@@ -7,14 +7,15 @@ public interface Command {
     int IMPORT_USERS = 3;
     int EXIT = 0;
 
-    int ADD_NEW_AD = 1;
-    int PRINT_MY_ADS = 2;
-    int PRINT_ALL_ADS = 3;
-    int PRINT_ADS_BY_CATEGORY = 4;
-    int PRINT_ALL_ADS_SORT_BY_TITLE = 5;
-    int PRINT_ALL_ADS_SORT_BY_DATE = 6;
-    int DELETE_MY_ALL_ADS = 7;
-    int DELETE_AD_BY_ID = 8;
+    int IMPORT_ITEMS = 1;
+    int ADD_NEW_AD = 2;
+    int PRINT_MY_ADS = 3;
+    int PRINT_ALL_ADS = 4;
+    int PRINT_ADS_BY_CATEGORY = 5;
+    int PRINT_ALL_ADS_SORT_BY_TITLE = 6;
+    int PRINT_ALL_ADS_SORT_BY_DATE = 7;
+    int DELETE_MY_ALL_ADS = 8;
+    int DELETE_AD_BY_ID = 9;
     int LOGOUT = 0;
 
 
@@ -26,6 +27,7 @@ public interface Command {
     }
 
     static void printUserCommands() {
+        System.out.println("Please input " + IMPORT_ITEMS + " for IMPORT_ITEMS");
         System.out.println("Please input " + ADD_NEW_AD + " for ADD_NEW_AD");
         System.out.println("Please input " + PRINT_MY_ADS + " for PRINT_MY_ADS");
         System.out.println("Please input " + PRINT_ALL_ADS + " for PRINT_ALL_ADS");

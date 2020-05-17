@@ -4,6 +4,7 @@ public enum Category {
 
     CAR,
     HOUSES,
-    ELECTRONICS
+    ELECTRONICS,
+
 
 }

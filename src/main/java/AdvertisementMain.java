@@ -8,13 +8,15 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import storage.DataStorage;
+import util.ExcelUtil;
+import util.FileUtil;
+
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class AdvertisementMain implements Command {
@@ -22,6 +24,7 @@ public class AdvertisementMain implements Command {
     private static final Scanner scanner = new Scanner(System.in);
     private static final DataStorage dataStorage = new DataStorage();
     private static User currentUser = null;
+
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         dataStorage.initData();
@@ -42,7 +45,7 @@ public class AdvertisementMain implements Command {
                     registerUser();
                     break;
                 case IMPORT_USERS:
-                    importFromXlsx();
+                    importFromUserXlsx();
                     break;
                 case EXIT:
                     isRun = false;
@@ -53,7 +56,35 @@ public class AdvertisementMain implements Command {
         }
     }
 
-    private static void importFromXlsx() {
+    private static void importFromItemXlsx() {
+        System.out.println("Please select xlsx path");
+        String xlsxPath = scanner.nextLine();
+
+        try{
+            XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
+            Sheet sheet = workbook.getSheetAt(0);
+            int lastRowNum = sheet.getLastRowNum();
+            for (int i = 1; i < lastRowNum ; i++) {
+                Row row = sheet.getRow(i);
+                String title = row.getCell(0).getStringCellValue();
+                String text = row.getCell(1).getStringCellValue();
+                double price = row.getCell(2).getNumericCellValue();
+                Category category = Category.valueOf(row.getCell(3).getStringCellValue());
+                Item item = new Item(title, text, price,
+                        currentUser, category, new Date());
+                dataStorage.add(item);
+//                dataStorage.addItem(item);
+            }
+            System.out.println("Import was success!");
+        }catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Error while importing users");
+        }
+    }
+
+
+
+    private static void importFromUserXlsx() {
         System.out.println("Please select xlsx path");
         String xlsxPath = scanner.nextLine();
 
@@ -65,7 +96,7 @@ public class AdvertisementMain implements Command {
                 Row row = sheet.getRow(i);
                 String name = row.getCell(0).getStringCellValue();
                 String surName = row.getCell(1).getStringCellValue();
-                Double age = row.getCell(2).getNumericCellValue();
+                double age = row.getCell(2).getNumericCellValue();
                 Gender gender = Gender.valueOf(row.getCell(3).getStringCellValue());
                 Cell phoneNumber = row.getCell(4);
                 String phoneNumberStr = phoneNumber.getCellType() == CellType.NUMERIC ?
@@ -76,11 +107,12 @@ public class AdvertisementMain implements Command {
                 User user = new User();
                 user.setName(name);
                 user.setSurName(surName);
-                user.setAge(age.intValue());
+                user.setAge(age);
                 user.setGender(gender);
                 user.setPhoneNumber(phoneNumberStr);
                 user.setPassword(passwordStr);
                 dataStorage.add(user);
+//                dataStorage.addUser(user);
             }
             System.out.println("Import was success!");
         } catch (IOException e) {
@@ -110,7 +142,7 @@ public class AdvertisementMain implements Command {
             } else {
                 System.out.println("User already exists");
             }
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException | IOException e) {
             System.out.println("Wrong Data!");
 
         }
@@ -149,6 +181,9 @@ public class AdvertisementMain implements Command {
                 userCommand = -1;
             }
             switch (userCommand) {
+                case IMPORT_ITEMS:
+                    importFromItemXlsx();
+                    break;
                 case ADD_NEW_AD:
                     addNewItem();
                     break;

@@ -14,11 +14,12 @@ public class FileUtil {
     private static final String USER_PATH = "src\\main\\resources\\serializeUser.obj";
     private static final String ITEM_PATH = "src\\main\\resources\\serializeItem.obj";
 
+
     public static void serializeUser(Map<String, User> userMap) {
         File serializeUser = new File(USER_PATH);
         try {
             if (!serializeUser.exists()) {
-                serializeUser.createNewFile();
+                boolean newFile = serializeUser.createNewFile();
             }
             try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(USER_PATH))) {
                 objectOutputStream.writeObject(userMap);
@@ -46,7 +47,7 @@ public class FileUtil {
         File serializeItem = new File(ITEM_PATH);
         try {
             if (!serializeItem.exists()) {
-                serializeItem.createNewFile();
+                boolean newFile = serializeItem.createNewFile();
             }
             try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(new FileOutputStream(ITEM_PATH))) {
                 objectOutputStream.writeObject(items);
@@ -70,4 +71,5 @@ public class FileUtil {
         }
         return result;
     }
+
 }
