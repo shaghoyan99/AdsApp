@@ -18,6 +18,8 @@ import util.FileUtil;
 import java.io.IOException;
 import java.util.*;
 
+import static model.Gender.valueOf;
+
 
 public class AdvertisementMain implements Command {
 
@@ -27,7 +29,7 @@ public class AdvertisementMain implements Command {
 
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        dataStorage.initData();
+       // dataStorage.initData();
         boolean isRun = true;
         while (isRun) {
             Command.printMainCommands();
@@ -64,11 +66,11 @@ public class AdvertisementMain implements Command {
             XSSFWorkbook workbook = new XSSFWorkbook(xlsxPath);
             Sheet sheet = workbook.getSheetAt(0);
             int lastRowNum = sheet.getLastRowNum();
-            for (int i = 1; i < lastRowNum ; i++) {
+            for (int i = 1; i <= lastRowNum ; i++) {
                 Row row = sheet.getRow(i);
                 String title = row.getCell(0).getStringCellValue();
                 String text = row.getCell(1).getStringCellValue();
-                double price = row.getCell(2).getNumericCellValue();
+                String price = row.getCell(2).getStringCellValue();
                 Category category = Category.valueOf(row.getCell(3).getStringCellValue());
                 Item item = new Item(title, text, price,
                         currentUser, category, new Date());
@@ -96,8 +98,8 @@ public class AdvertisementMain implements Command {
                 Row row = sheet.getRow(i);
                 String name = row.getCell(0).getStringCellValue();
                 String surName = row.getCell(1).getStringCellValue();
-                double age = row.getCell(2).getNumericCellValue();
-                Gender gender = Gender.valueOf(row.getCell(3).getStringCellValue());
+                Gender gender = Gender.valueOf(row.getCell(2).getStringCellValue());
+                String age = row.getCell(3).getStringCellValue();
                 Cell phoneNumber = row.getCell(4);
                 String phoneNumberStr = phoneNumber.getCellType() == CellType.NUMERIC ?
                         String.valueOf(Double.valueOf(phoneNumber.getNumericCellValue()).intValue()) : phoneNumber.getStringCellValue();
@@ -112,7 +114,6 @@ public class AdvertisementMain implements Command {
                 user.setPhoneNumber(phoneNumberStr);
                 user.setPassword(passwordStr);
                 dataStorage.add(user);
-//                dataStorage.addUser(user);
             }
             System.out.println("Import was success!");
         } catch (IOException e) {
@@ -133,8 +134,8 @@ public class AdvertisementMain implements Command {
                 User user = new User();
                 user.setName(userDataArray[0]);
                 user.setSurName(userDataArray[1]);
-                user.setGender(Gender.valueOf(userDataArray[2].toUpperCase()));
-                user.setAge(Integer.parseInt(userDataArray[3]));
+                user.setGender(valueOf(userDataArray[2].toUpperCase()));
+                user.setAge(userDataArray[3]);
                 user.setPhoneNumber(userDataArray[4]);
                 user.setPassword(userDataArray[5]);
                 dataStorage.add(user);
@@ -224,7 +225,7 @@ public class AdvertisementMain implements Command {
         try {
             String itemDataStr = scanner.nextLine();
             String[] itemDataArray = itemDataStr.split(",");
-            Item item = new Item(itemDataArray[0], itemDataArray[1], Double.parseDouble(itemDataArray[2]),
+            Item item = new Item(itemDataArray[0], itemDataArray[1], itemDataArray[2],
                     currentUser, Category.valueOf(itemDataArray[3].toUpperCase()), new Date());
             dataStorage.add(item);
             System.out.println("Item was successfully added");

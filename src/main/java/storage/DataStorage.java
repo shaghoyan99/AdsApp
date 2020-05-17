@@ -16,21 +16,21 @@ public class DataStorage {
     private List<Item> items = new ArrayList<>();
 
 
-    public void initData() {
-        map = FileUtil.deserializeUser();
-        items = FileUtil.deserializeItem();
-
-
-        if (items != null && !items.isEmpty()) {
-            Item item = items.get(items.size() - 1);
-            itemId = item.getId() + 1;
-        }
-    }
+//    public void initData() {
+//        map = FileUtil.deserializeUser();
+//        items = FileUtil.deserializeItem();
+//
+//
+//        if (items != null && !items.isEmpty()) {
+//            Item item = items.get(items.size() - 1);
+//            itemId = item.getId() + 1;
+//        }
+//    }
 
     public void add(User user) throws IOException {
         map.put(user.getPhoneNumber(), user);
         ExcelUtil.user(map);
-        FileUtil.serializeUser(map);
+        //FileUtil.serializeUser(map);
 
     }
 
@@ -38,7 +38,7 @@ public class DataStorage {
         item.setId(itemId++);
         items.add(item);
         ExcelUtil.item(items);
-        FileUtil.serializeItem(items);
+       // FileUtil.serializeItem(items);
 
     }
 

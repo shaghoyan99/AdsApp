@@ -29,8 +29,9 @@ public class ExcelUtil {
         if (lasRowNum < 0) {
             lasRowNum = 1;
         }
+
         for (Item item : items) {
-            for (int i = 1; i <= lasRowNum ; i++) {
+            for (int i = 0; i <= lasRowNum ; i++) {
                 Row row = sheet.createRow(ROW_IND++);
                 row.createCell(0).setCellValue(item.getTitle());
                 row.createCell(1).setCellValue(item.getText());
@@ -52,6 +53,7 @@ public class ExcelUtil {
         }
 
     }
+
     public static void user(Map<String, User> users) throws IOException {
         XSSFWorkbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet();
@@ -60,7 +62,7 @@ public class ExcelUtil {
             lasRowNum = 1;
         }
         for (User value : users.values()) {
-            for (int i = 1; i <= lasRowNum; i++) {
+            for (int i = 0; i <= lasRowNum; i++) {
                 Row row = sheet.createRow(ROW_INDEX++);
                 row.createCell(0).setCellValue(value.getName());
                 row.createCell(1).setCellValue(value.getSurName());
@@ -70,8 +72,6 @@ public class ExcelUtil {
                 row.createCell(5).setCellValue(value.getPassword());
             }
         }
-
-
 //        File serializeItem = new File(USER_PATH);
 //        try {
 //            if (!serializeItem.exists()) {
